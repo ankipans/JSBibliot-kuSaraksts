@@ -1,0 +1,47 @@
+html,
+body {
+  height: 100%;
+}
+
+#main-container {
+  background-color: #eeeeee;
+  height: 100%;
+}
+
+.text-body-secondary {
+    color: grey;
+}
+
+#current-datetime {
+    font-variant-numeric: tabular-nums;
+}
+
+.list-group-item {
+    cursor: grab;
+}
+
+.list-group-item.dragging {
+    opacity: 0.5;
+}
+
+.drag-handle {
+    cursor: grab;
+}
+
+#back-to-top {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.spotify-art {
+    object-fit: cover;
+    background-color: #dee2e6;
+}
+
+.spotify-info {
+    min-width: 0;
+}

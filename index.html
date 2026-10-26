@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JS Bibliotēku saraksts</title>
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <!-- icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+    <!-- custom css -->
+    <link href="custom.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container" id="main-container">
+      <div class="row">
+        <div class="d-flex justify-content-center mt-4">
+          <div class="text-body-secondary" id="current-datetime"></div>
+        </div>
+      </div>
+      <!-- spotify now playing -->
+      <div class="row">
+        <div class="d-flex justify-content-center mt-3">
+          <div class="col-12 col-lg-8">
+            <div class="border rounded-3 shadow-sm p-3" id="spotify-card">
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <h2 class="h6 mb-0 d-flex align-items-center gap-2">
+                  <i class="bi bi-spotify text-success" aria-hidden="true"></i>
+                  Spotify — tagad atskaņo
+                </h2>
+                <div class="d-flex gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm d-none"
+                    id="spotify-refresh"
+                    aria-label="Atjaunot Spotify informāciju"
+                    title="Atjaunot"
+                  >
+                    <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm d-none"
+                    id="spotify-disconnect"
+                  >
+                    Atvienot
+                  </button>
+                </div>
+              </div>
+
+              <div class="d-none align-items-center gap-3 mt-2" id="spotify-player">
+                <img
+                  class="rounded flex-shrink-0 d-none spotify-art"
+                  id="spotify-art"
+                  width="56"
+                  height="56"
+                  alt="Albuma vāks"
+                />
+                <div class="flex-grow-1 spotify-info">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge text-bg-success d-none" id="spotify-playing">Atskaņo</span>
+                    <span class="badge text-bg-secondary d-none" id="spotify-paused">Pauzē</span>
+                    <span class="small text-body-secondary" id="spotify-idle">Nekas netiek atskaņots</span>
+                  </div>
+                  <a
+                    class="fw-bold text-decoration-none d-block text-truncate"
+                    id="spotify-track"
+                    target="_blank"
+                    rel="noopener"
+                  ></a>
+                  <div class="small text-body-secondary text-truncate" id="spotify-artists"></div>
+                  <div class="d-none" id="spotify-progress-wrap">
+                    <div
+                      class="progress mt-1"
+                      style="height: 4px"
+                      role="progressbar"
+                      aria-label="Dziesmas progress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      id="spotify-progress-bar"
+                    >
+                      <div class="progress-bar bg-success" id="spotify-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small text-body-secondary">
+                      <span id="spotify-elapsed">0:00</span>
+                      <span id="spotify-duration">0:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="small mt-2 d-none" id="spotify-status" role="status" aria-live="polite"></div>
+
+              <div class="mt-2" id="spotify-setup">
+                <p class="small text-body-secondary mb-2">
+                  Pieslēdz Spotify kontu, lai redzētu dziesmu, kas tiek atskaņota tagad.
+                </p>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">
+                    <i class="bi bi-key" aria-hidden="true"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="spotify-client-id"
+                    placeholder="Spotify Client ID"
+                    aria-label="Spotify Client ID"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success bi bi-spotify"
+                    id="spotify-connect"
+                  >
+                    Pieslēgties
+                  </button>
+                </div>
+                <details class="small text-body-secondary mt-2">
+                  <summary>Kā pieslēgt Spotify?</summary>
+                  <ol class="mt-2 mb-0 ps-3">
+                    <li>
+                      Publicē lapu ar <code>https://</code> adresi (piemēram, GitHub Pages,
+                      Netlify, Vercel vai Cloudflare Pages) un atver to no turienes. Spotify
+                      nepieņem <code>http://</code> vai <code>file://</code> atgriešanās adresi.
+                    </li>
+                    <li>
+                      Atver
+                      <a
+                        href="https://developer.spotify.com/dashboard"
+                        target="_blank"
+                        rel="noopener"
+                        >Spotify Developer Dashboard</a
+                      >, izveido lietotni un nokopē tās <strong>Client ID</strong>.
+                    </li>
+                    <li>
+                      Lietotnes iestatījumos pievieno <strong>Redirect URI</strong>:
+                      <code id="spotify-redirect"></code>
+                    </li>
+                    <li>Ielīmē Client ID laukā augstāk un nospied <strong>Pieslēgties</strong>.</li>
+                  </ol>
+                </details>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="d-flex justify-content-center mt-5 mb-2">
+          <h1>Pievieno JS Bibliotēku</h1>
+        </div>
+      </div>
+      <!-- input form -->
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-lg-5">
+          <div class="input-group mb-2">
+            <span class="input-group-text">
+              <i class="bi bi-book" aria-hidden="true"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Nosaukums"
+              aria-label="Nosaukums"
+              id="nosaukums"
+            />
+          </div>
+          <div class="input-group mb-2">
+            <span class="input-group-text">
+              <i class="bi bi-card-text" aria-hidden="true"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Apraksts"
+              aria-label="Apraksts"
+              id="apraksts"
+            />
+          </div>
+          <div class="input-group mb-2">
+            <span class="input-group-text">
+              <i class="bi bi-link-45deg" aria-hidden="true"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="SRC saite"
+              aria-label="SRC saite"
+              id="srcsaite"
+            />
+          </div>
+          <div class="input-group mb-2">
+            <span class="input-group-text">
+              <i class="bi bi-hdd" aria-hidden="true"></i>
+            </span>
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Izmērs (kb)"
+              aria-label="Izmērs (kb)"
+              id="izmerskb"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-lg-5">
+          <div class="d-flex justify-content-end flex-wrap">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm mt-1 bi bi-plus-circle"
+              id="enter"
+            >
+              Pievienot sarakstam
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm mt-1 ms-2 bi bi-trash"
+              id="clear"
+            >
+              Notīrīt sarakstu
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-warning btn-sm mt-1 ms-2 bi bi-arrow-counterclockwise"
+              id="reset"
+            >
+              Atiestatīt
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- list -->
+      <div class="d-flex justify-content-center mt-5">
+        <div class="col-12 col-lg-8">
+          <div class="d-flex justify-content-between align-items-center">
+            <span
+              class="text-body-secondary"
+              id="item-count"
+              aria-live="polite"
+            ></span>
+            <div class="d-flex align-items-center">
+              <label class="text-body-secondary me-2 mb-0" for="sort">Kārtot:</label>
+              <select
+                class="form-select form-select-sm w-auto"
+                id="sort"
+                aria-label="Kārtot sarakstu"
+              >
+                <option value="manuali">Manuāli</option>
+                <option value="nosaukumsAsc">Nosaukums A–Z</option>
+                <option value="nosaukumsDesc">Nosaukums Z–A</option>
+                <option value="izmersAsc">Izmērs augoši</option>
+                <option value="izmersDesc">Izmērs dilstoši</option>
+                <option value="laiksDesc">Jaunākie vispirms</option>
+                <option value="laiksAsc">Vecākie vispirms</option>
+              </select>
+            </div>
+          </div>
+          <ul class="list-group mt-2" id="library-group"></ul>
+        </div>
+      </div>
+      <!-- end container` -->
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary btn-sm rounded-circle shadow position-fixed bottom-0 end-0 m-3 d-none"
+      id="back-to-top"
+      aria-label="Atpakaļ uz augšu"
+      title="Atpakaļ uz augšu"
+    >
+      <i class="bi bi-arrow-up" aria-hidden="true"></i>
+    </button>
+   
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/lv.js"></script>
+    <script src="spotify.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
